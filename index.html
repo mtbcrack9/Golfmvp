@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#0d1512">
+<meta name="description" content="GolfMVP – echte Golfplätze, GPS und Scorecard auf dem iPhone."><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="GolfMVP">
+<link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""><link rel="apple-touch-icon" href="icon.svg"><link rel="stylesheet" href="style.css">
+<title>GolfMVP</title>
+
+<style>
+.whs-panel{margin-top:16px;padding:16px;border-radius:18px;background:#171b20;border:1px solid #2a3038}
+.whs-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.whs-grid label{font-size:12px;opacity:.75}.whs-grid input{width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid #343b45;background:#0f1216;color:inherit}
+.whs-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:12px}.whs-table th,.whs-table td{padding:7px;border-bottom:1px solid #2b3037;text-align:center}.whs-table th{opacity:.7}
+.whs-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}.whs-kpi{padding:12px;border-radius:14px;background:#0f1216}.whs-kpi b{display:block;font-size:20px;margin-top:3px}
+</style>
+<script>
+window.GolfMVPWHS={
+  calcCourseHandicap(hcp,slope,cr,par){
+    return Math.round((Number(hcp)*Number(slope)/113 + (Number(cr)-Number(par))) );
+  },
+  strokesBySI(courseHcp,si){
+    const n=Math.max(0,Number(courseHcp)||0), idx=Number(si)||1;
+    return Math.floor(n/18)+(idx <= (n%18) ? 1 : 0);
+  },
+  netScore(gross,strokes){return Math.max(0,Number(gross)-Number(strokes));},
+  stableford(par,net){const d=Number(net)-Number(par);return Math.max(0,2-d);},
+  scoreDifferential(gross,cr,slope,par,adjustment=0){
+    return (113/Number(slope))*(Number(gross)-Number(cr)-Number(adjustment));
+  }
+};
+</script>
+</head>
+<body>
+<div id="app">
+<header><div><div class="eyebrow">GOLF</div><h1>Dein Spiel.</h1></div><button class="iconbtn" onclick="showProfile()">●</button></header>
+<main id="screen"></main>
+<nav class="tabbar">
+<button data-tab="home" onclick="go('home')">⌂<span>Home</span></button>
+<button data-tab="round" onclick="go('round')">⌖<span>Runde</span></button>
+<button data-tab="score" onclick="go('score')">☷<span>Score</span></button>
+<button data-tab="stats" onclick="go('stats')">▥<span>Stats</span></button>
+</nav>
+</div>
+<div id="toast"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script><script src="app.js"></script>
+</body></html>
