@@ -9,9 +9,7 @@ function ratingFor(c){const n=(c?.name||'').toLowerCase();return RATING_DB.find(
 function selectedTee(){return state.course?.rating?.tees?.find((_,i)=>i===Number(localStorage.getItem('golfmvp_tee')||0))||state.course?.rating?.tees?.[0]||null}
 function setTee(i){localStorage.setItem('golfmvp_tee',String(i));state.course.rating=ratingFor(state.course);render();setTimeout(initMap,50)}
 function courseHandicap(hi,tee){if(!tee||hi==='')return null;const n=Number(hi);if(!Number.isFinite(n))return null;return Math.round(n*(tee.slope/113)+(tee.cr-tee.par))}
-function netScore(score,par,hcp,strokes){if(!score)return '—';return Number(score)-strokes} 
-
-const state={tab:'home',hole:1,score:JSON.parse(localStorage.getItem('golfmvp_score')||'{}'),gps:null,rounds:JSON.parse(localStorage.getItem('golfmvp_rounds')||'[]'),courses:[],course:null,loading:false,favorites:JSON.parse(localStorage.getItem('golfmvp_favorites')||'[]'),query:'',map:null};
+function netScore(score,par,hcp,strokes){if(!score)return '—';return Number(score)-
 function save(){localStorage.setItem('golfmvp_score',JSON.stringify(state.score));localStorage.setItem('golfmvp_rounds',JSON.stringify(state.rounds));localStorage.setItem('golfmvp_favorites',JSON.stringify(state.favorites))}
 function go(t){state.tab=t;render()}
 function render(){document.querySelectorAll('.tabbar button').forEach(b=>b.classList.toggle('active',b.dataset.tab===state.tab));const s=document.getElementById('screen');({home:home,round:round,score:score,stats:stats,courses:coursesView}[state.tab]||home)();}
